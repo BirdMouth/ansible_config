@@ -1,0 +1,5 @@
+virtual_machines:
+  hosts:
+    virtual_machine:
+      ansible_host:
+      ansible_user:

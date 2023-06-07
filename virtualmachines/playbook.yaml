@@ -1,0 +1,63 @@
+- name: Setup virtualmachines
+  hosts: ubuntu_sandbox
+  become: true
+  tasks:
+    - name: Update and upgrade packages
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 # One day
+
+    - name: Install virtualbox packages
+      apt:
+        name:
+        - virtualbox-guest-utils
+        - virtualbox-guest-x11
+        - virtualbox-ext-pack
+
+    - name: Enable VBoxClient clipboard
+      command: sudo VBoxClient --clipboard
+
+    - name: Install cowsay and fortune (extremely important)
+      apt:
+        name:
+        - cowsay
+        - fortune
+
+    - name: Copy .bashrc
+      copy:
+        src: configs/.bashrc
+        dest: ~/.bashrc
+
+    - name: Install vim
+      apt:
+        name:
+        - vim
+
+    - name: Copy .vimrc
+      copy:
+        src: configs/.vimrc
+        dest: ~/.vimrc
+
+    - name: Install git
+      apt:
+        name:
+        - git
+
+    - name: Set vim as default editor for git
+      command: git config --global core.editor "vim"
+
+    - name: Install i3wm
+      apt:
+        name:
+        - i3
+
+    - name: Copy i3wm configuration
+      copy:
+        src: configs/i3/config
+        dest: /etc/i3/config
+
+    - name: Reboot
+      reboot:
+        reboot_timeout: 60
+        test_command: whoami
